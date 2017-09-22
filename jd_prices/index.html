@@ -108,10 +108,12 @@
 	        }
 	    }
 		// 获得数字价格
-		var getPriceNum = function(skus, $wrap, perfix, callback) {
-		    skus = typeof skus === 'string' ? [skus]: skus;
-		    $wrap = $wrap || $('body');
-		    perfix = perfix || 'J-p-';
+		var getPriceNum = function(skus, $wrap, expectprice, perfix, callback) {
+		    skus = typeof skus === 'string' ? [skus]: skus; //商品编号
+		    $wrap = $wrap || $('body'); //dom元素
+		    perfix = perfix || 'J-p-'; //id前缀
+		    expectprice = parseFloat(expectprice, 10); //期望价格
+
 		    //转换时间戳 yyyy/mm/dd hh:mm	
 		    var date = new Date();	   		   
        		var formattedDate = date.getFullYear() + "/" + ('0' + (date.getMonth() + 1)).slice(-2) + "/" + ('0' + date.getDate()).slice(-2) + " " + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
@@ -134,7 +136,7 @@
 		                } else {
 		                	$wrap.find('.'+ perfix + sku).append('<p><span>'+ formattedDate +'</span>暂无报价</p>')
 		                }
-		                if(price < 3600){
+		                if(expectprice && price < expectprice){ //设置价格预期
 		                	clearInterval(timer);
 		                	notify("京东大苹果","终于等到你还好没放弃！")
 		                }
@@ -147,7 +149,7 @@
 		    });
 		};
 		
-		getPriceNum(['3726832','3296833','3726834'],$('#content'));
+		getPriceNum(['3726832','3296833','3726834'],$('#content'),'3600');
 		var timer = setInterval("getPriceNum(['3726832','3296833','3726834'],$('#content'))", 1800000)
 	</script>
 </body>
