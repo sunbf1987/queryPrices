@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width">
+<title>京东 iphone-6sp-32G 全网通价格</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<style type="text/css">
+	*{margin:0;padding:0}
+	body{ background-color:slategray}
+	#content{text-align:center;margin:50px; font-size:18px;}
+	h1{ margin:20px auto; color:#f5f5f5;}
+	p{ margin:10px 0; padding:5px 0}
+	span{margin-right:50px;}
+	.gold{ background-color:gold}
+	.gray{ background-color:gray}
+	.silver{ background-color:silver}
+	.J-p-3726834 p:after,.J-p-3726832 p:after,.J-p-3726833 p:after{display:inline-block; margin-left:10px;}
+	.J-p-3726834 p:after{ content:'【金色32G】'; }
+	.J-p-3726832 p:after{ content:'【深空灰32G】'; }
+	.J-p-3296833 p:after{ content:'【银色32G】'; }
+</style>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+	<div id="content">
+		<h1>京东 iphone-6sp-32G 全网通价格</h1>
+		<div class="gold J-p-3726834"></div>
+		<div class="gray J-p-3726832"></div>
+		<div class="silver J-p-3296833"></div>
+	</div>
+	<script>
+		//控制播放次数
+		var playTotal = function(elem, total){
+	    	var start = 0;
+	    	elem.addEventListener('ended', function(){        		
+	    		setTimeout(function(){
+	    			if(start < total){
+	    				elem.play();
+	    				start++;
+	    			}
+	    		}, 500)
+	    	},false)
+	    }
+	    //创建播放音频
+	    var audio = function(){
+	    	var oDiv = document.createElement('div');
+	    	oDiv.style.display = 'none';
+	    	var audio = document.createElement('audio');
+	    	audio.src = '跑跑卡丁车背景音乐.mp3';
+	    	// audio.loop = 'loop';
+	    	// audio.autoplay = 'autoplay';
+	    	oDiv.appendChild(audio);
+	    	document.body.appendChild(oDiv);
+	    	audio.play();
+	    	playTotal(audio, 30)
+	    }
+		//桌面提醒 https://newsn.net/say/html5-notification-sound.html
+		var notify = function(title, content) {		        
+	        if(!title && !content){
+	            title = "桌面提醒";
+	            content = "您看到此条信息桌面提醒设置成功";
+	        }
+	        //var iconUrl = "/images/send_ok.png";	        
+	        
+	        if (window.webkitNotifications) {
+	            //chrome老版本
+	            if (window.webkitNotifications.checkPermission() == 0) {
+	                var notif = window.webkitNotifications.createNotification(iconUrl, title, content);
+	                notif.display = function() {}
+	                notif.onerror = function() {}
+	                notif.onclose = function() {}
+	                notif.onclick = function() {this.cancel();}
+	                notif.replaceId = 'Meteoric';
+	                notif.show();
+	            } else {
+	                window.webkitNotifications.requestPermission($jy.notify);
+	            }
+	        }
+	        else if("Notification" in window){
+	            // 判断是否有权限
+	            if (Notification.permission === "granted") {
+	                var notification = new Notification(title, {
+	                    "body": content
+	                });
+	                audio()
+	            }
+	            //如果没权限，则请求权限
+	            else if (Notification.permission !== 'denied') {
+	                Notification.requestPermission(function(permission) {
+	                    // Whatever the user answers, we make sure we store the
+	                    // information
+	                    if (!('permission' in Notification)) {
+	                        Notification.permission = permission;
+	                    }
+	                    //如果接受请求
+	                    if (permission === "granted") {
+	                        var notification = new Notification(title, {
+			                    "body": content
+	                        });
+	                        audio()
+	                    }
+	                });
+	            }
+	        }
+	    }
+		// 获得数字价格
+		var getPriceNum = function(skus, $wrap, perfix, callback) {
+		    skus = typeof skus === 'string' ? [skus]: skus;
+		    $wrap = $wrap || $('body');
+		    perfix = perfix || 'J-p-';
+		    //转换时间戳 yyyy/mm/dd hh:mm	
+		    var date = new Date();	   		   
+       		var formattedDate = date.getFullYear() + "/" + ('0' + (date.getMonth() + 1)).slice(-2) + "/" + ('0' + date.getDate()).slice(-2) + " " + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+
+			console.log('更新时间：'+formattedDate);
+		    $.ajax({
+		        url: 'https://p.3.cn/prices/mgets?skuIds=J_' + skus.join(',J_') + '&type=1',
+		        dataType: 'jsonp',
+		        success: function (r) {
+		            if (!r && !r.length) {
+		                return false;
+		            }
+		            for (var i = 0; i < r.length; i++) {
+		                var sku = r[i].id.replace('J_', '');
+		                var price = parseFloat(r[i].p, 10);
+		                console.log(price)
+
+		                if (price > 0) {
+		                	$wrap.find('.'+ perfix + sku).append('<p><span>'+ formattedDate +'</span>￥' + r[i].p + '</p>')
+		                } else {
+		                	$wrap.find('.'+ perfix + sku).append('<p><span>'+ formattedDate +'</span>暂无报价</p>')
+		                }
+		                if(price < 3600){
+		                	clearInterval(timer);
+		                	notify("京东大苹果","终于等到你还好没放弃！")
+		                }
+
+		                if ( typeof callback === 'function' ) {
+		                    callback(sku, price, r);
+		                }
+		            }
+		        }
+		    });
+		};
+		
+		getPriceNum(['3726832','3296833','3726834'],$('#content'));
+		var timer = setInterval("getPriceNum(['3726832','3296833','3726834'],$('#content'))", 1800000)
+	</script>
+</body>
+</html>
